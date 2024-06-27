@@ -2,13 +2,33 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "better-bookmarks",
   "title": "Better Bookmarks",
-  "description": "Makes searching bookmarks better",
+  "description": "Search Browser Bookmarks, including folder path",
   "icon": "command-icon.png",
   "author": "jackieaskins",
   "license": "MIT",
+  "preferences": [
+    {
+      "name": "defaultBrowser",
+      "title": "Default Browser",
+      "description": "Specify which browser to pull bookmarks from",
+      "required": true,
+      "type": "dropdown",
+      "default": "chrome",
+      "data": [
+        {
+          "title": "Google Chrome",
+          "value": "chrome"
+        },
+        {
+          "title": "Brave Browser",
+          "value": "brave"
+        }
+      ]
+    }
+  ],
   "commands": [
     {
-      "name": "index",
+      "name": "search-bookmarks",
       "title": "Search Browser Bookmarks",
       "description": "Searches Browser Bookmarks",
       "mode": "view"
