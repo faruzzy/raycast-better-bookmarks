@@ -36,3 +36,5 @@ export type BookmarkData = {
   fullPath: string[];
   url: string;
 };
+
+export type Browser = ExtensionPreferences["defaultBrowser"];
