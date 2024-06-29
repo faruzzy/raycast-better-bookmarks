@@ -1,6 +1,7 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import { useMemo } from "react";
 import { BookmarkData } from "../types";
+import { getFavicon } from "@raycast/utils";
 
 type BookmarkRowProps = {
   bookmark: BookmarkData;
@@ -12,7 +13,7 @@ export default function BookmarkRow({ bookmark: { name, folderPath, url, fullPat
     [folderPath],
   );
 
-  const favicon = useMemo(() => `https://api.faviconkit.com/${new URL(url).host}`, [url]);
+  const favicon = getFavicon(new URL(url).origin, { fallback: Icon.Bookmark });
 
   return (
     <List.Item
