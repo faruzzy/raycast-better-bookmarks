@@ -15,12 +15,14 @@ export default function BookmarkRow({ bookmark: { name, folderPath, url, fullPat
 
   const favicon = getFavicon(new URL(url).origin, { fallback: Icon.Bookmark });
 
+  const keywords = [...fullPath.flatMap((part) => part.split(" ")), url];
+
   return (
     <List.Item
       icon={favicon}
       title={name}
       subtitle={url}
-      keywords={fullPath}
+      keywords={keywords}
       accessories={accessories}
       actions={
         <ActionPanel>
