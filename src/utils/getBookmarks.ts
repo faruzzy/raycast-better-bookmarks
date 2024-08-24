@@ -7,7 +7,10 @@ const BROWSER_PATHS: Record<Browser, string> = {
   brave: "BraveSoftware/Brave-Browser",
 };
 
-function getBookmarkData(currPath: string[], bookmark: Bookmark): BookmarkData[] {
+function getBookmarkData(
+  currPath: string[],
+  bookmark: Bookmark,
+): BookmarkData[] {
   const newPath = [...currPath, bookmark.name];
 
   if (bookmark.type === "url") {
@@ -28,7 +31,9 @@ function getBookmarkData(currPath: string[], bookmark: Bookmark): BookmarkData[]
 export function loadBookmarkFile(browser: Browser): BookmarkFile {
   const bookmarksFilePath = `${homedir()}/Library/Application Support/${BROWSER_PATHS[browser]}/Default/Bookmarks`;
 
-  return JSON.parse(readFileSync(bookmarksFilePath, "utf8").toString()) as BookmarkFile;
+  return JSON.parse(
+    readFileSync(bookmarksFilePath, "utf8").toString(),
+  ) as BookmarkFile;
 }
 
 export default function getBookmarks(browser: Browser): BookmarkData[] {

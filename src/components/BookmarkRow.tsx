@@ -7,9 +7,14 @@ type BookmarkRowProps = {
   bookmark: BookmarkData;
 };
 
-export default function BookmarkRow({ bookmark: { name, folderPath, url, fullPath } }: BookmarkRowProps): JSX.Element {
+export default function BookmarkRow({
+  bookmark: { name, folderPath, url, fullPath },
+}: BookmarkRowProps): JSX.Element {
   const accessories = useMemo(
-    () => (folderPath.length ? [{ icon: Icon.Folder, text: folderPath.join("/") }] : []),
+    () =>
+      folderPath.length
+        ? [{ icon: Icon.Folder, text: folderPath.join("/") }]
+        : [],
     [folderPath],
   );
 
