@@ -17,10 +17,14 @@ export default function BookmarkRow({
         : [],
     [folderPath],
   );
-
-  const favicon = getFavicon(new URL(url).origin, { fallback: Icon.Bookmark });
-
-  const keywords = [...fullPath.flatMap((part) => part.split(" ")), url];
+  const favicon = useMemo(
+    () => getFavicon(new URL(url).origin, { fallback: Icon.Bookmark }),
+    [url],
+  );
+  const keywords = useMemo(
+    () => [...fullPath.flatMap((part) => part.split(" ")), url],
+    [fullPath, url],
+  );
 
   return (
     <List.Item
@@ -32,6 +36,7 @@ export default function BookmarkRow({
       actions={
         <ActionPanel>
           <Action.OpenInBrowser url={url} />
+          <Action.CopyToClipboard content={url} />
         </ActionPanel>
       }
     />
