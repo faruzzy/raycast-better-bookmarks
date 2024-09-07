@@ -1,14 +1,14 @@
-import { List, getPreferenceValues } from "@raycast/api";
+import { List } from "@raycast/api";
 import BookmarkRow from "./components/BookmarkRow";
 import getBookmarks from "./utils/getBookmarks";
-
-const { defaultBrowser } = getPreferenceValues<Preferences>();
-const bookmarks = getBookmarks(defaultBrowser);
+import { useCachedPromise } from "@raycast/utils";
 
 export default function Command() {
+  const { data: bookmarks, isLoading } = useCachedPromise(getBookmarks);
+
   return (
-    <List>
-      {bookmarks.map((bookmark) => (
+    <List isLoading={isLoading}>
+      {bookmarks?.map((bookmark) => (
         <BookmarkRow key={bookmark.id} bookmark={bookmark} />
       ))}
     </List>

@@ -7,9 +7,15 @@ type BookmarkRowProps = {
   bookmark: BookmarkData;
 };
 
+const MAX_LENGTH = 50;
+
 export default function BookmarkRow({
   bookmark: { name, folderPath, url, fullPath },
 }: BookmarkRowProps): JSX.Element {
+  const subtitle = useMemo(
+    () => (url.length > MAX_LENGTH ? `${url.slice(0, MAX_LENGTH)}...` : url),
+    [url],
+  );
   const accessories = useMemo(
     () =>
       folderPath.length
@@ -30,7 +36,7 @@ export default function BookmarkRow({
     <List.Item
       icon={favicon}
       title={name}
-      subtitle={url}
+      subtitle={subtitle}
       keywords={keywords}
       accessories={accessories}
       actions={
