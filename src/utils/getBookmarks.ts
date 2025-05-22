@@ -1,7 +1,8 @@
 import { homedir } from "os";
 import { Bookmark, BookmarkData, BookmarkFile, Browser } from "../types";
 import { getPreferenceValues } from "@raycast/api";
-import { readdirSync, readFileSync, statSync } from "fs";
+import { readdirSync, statSync } from "fs";
+import { readFile } from "fs/promises";
 import path from "path";
 
 const BROWSER_PATHS: Record<Browser, string> = {
@@ -31,11 +32,11 @@ function getBookmarkData(
 }
 
 /**
- * Gets all the bookmark files.
- * The default location is found within <browser-path>/Default
- * Additional Chrome profiles are stored in: <browser-path>/Profile <number>
+ * Gets all the bookmark directories.
+ * The default location is found within <browser-path>/Default/Bookmarks/
+ * Additional Chrome profiles are stored in: <browser-path>/Profile <number>/Bookmarks/
  */
-function findChromiumDirectories(basePath: string): string[] {
+function findBookmarkDirectories(basePath: string): string[] {
   const entries = readdirSync(basePath);
 
   return entries
@@ -45,10 +46,10 @@ function findChromiumDirectories(basePath: string): string[] {
         statSync(fullPath).isDirectory() &&
         (entry === "Default" || entry.startsWith("Profile ")),
     )
-    .map(({ fullPath }) => fullPath);
+    .map(({ fullPath }) => path.join(fullPath, "Bookmarks"));
 }
 
-function loadBookmarkFiles(browser: Browser): BookmarkFile[] {
+async function loadBookmarkFiles(browser: Browser): Promise<BookmarkFile[]> {
   const basePath = path.join(
     homedir(),
     "Library",
@@ -56,19 +57,21 @@ function loadBookmarkFiles(browser: Browser): BookmarkFile[] {
     BROWSER_PATHS[browser],
   );
 
-  return findChromiumDirectories(basePath)
-    .map((currentDir) => path.join(currentDir, "Bookmarks"))
-    .map(
-      (filePath) =>
-        JSON.parse(readFileSync(filePath, "utf8").toString()) as BookmarkFile,
-    );
+  return await Promise.all(
+    findBookmarkDirectories(basePath).map(
+      async (filePath) =>
+        JSON.parse(
+          (await readFile(filePath, "utf8")).toString(),
+        ) as BookmarkFile,
+    ),
+  );
 }
 
-export default function getBookmarks(): BookmarkData[] {
+export default async function getBookmarks(): Promise<BookmarkData[]> {
   const { defaultBrowser } = getPreferenceValues<Preferences>();
-  const loadResult = loadBookmarkFiles(defaultBrowser);
+  const bookmarkFiles = await loadBookmarkFiles(defaultBrowser);
 
-  return loadResult.flatMap(({ roots }) =>
+  return bookmarkFiles.flatMap(({ roots }) =>
     Object.values(roots).flatMap(({ children }) =>
       children.flatMap((bookmark) => getBookmarkData([], bookmark)),
     ),

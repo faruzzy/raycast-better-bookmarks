@@ -34,12 +34,14 @@
       "mode": "view"
     }
   ],
+  "dependencies": {
+    "@raycast/api": "^1.99.0",
+    "@raycast/utils": "^1.19.1"
+  },
   "devDependencies": {
-    "@raycast/api": "^1.98.5",
     "@raycast/eslint-config": "^1.0.11",
-    "@raycast/utils": "^1.19.1",
-    "@types/node": "20.8.10",
-    "@types/react": "18.3.3",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
